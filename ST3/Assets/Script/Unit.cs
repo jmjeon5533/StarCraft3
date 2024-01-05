@@ -15,19 +15,12 @@ public class Unit : MonoBehaviour
     }
     private void Update()
     {
-        if(Input.GetMouseButtonDown(0))
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if(Physics.Raycast(ray,out hit, Mathf.Infinity,LayerMask.GetMask("Ground")))
-            {
-                if(hit.collider)
-                {
-                    targetIndex = 0;
-                    NavManager.RequestPath(transform.position, hit.point,OnPathFound);
-                }
-            }
-        }
+        
+    }
+    public void Move(Vector3 TargetPos)
+    {
+        targetIndex = 0;
+        NavManager.RequestPath(transform.position, TargetPos,OnPathFound);
     }
     public void OnPathFound(Vector3[] newPath, bool pathSuccessful)
     {
