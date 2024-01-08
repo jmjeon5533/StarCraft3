@@ -6,21 +6,13 @@ public class Unit : MonoBehaviour
 {
     float speed = 10;
     Vector3[] path;
-    int targetIndex;
+    protected int targetIndex;
     Coroutine curPath;
 
-    void Start()
-    {
-            
-    }
-    private void Update()
-    {
-        
-    }
-    public void Move(Vector3 TargetPos)
+    public virtual void Move(RaycastHit hit)
     {
         targetIndex = 0;
-        NavManager.RequestPath(transform.position, TargetPos,OnPathFound);
+        NavManager.RequestPath(transform.position, hit.point,OnPathFound);
     }
     public void OnPathFound(Vector3[] newPath, bool pathSuccessful)
     {
@@ -38,13 +30,11 @@ public class Unit : MonoBehaviour
 
         while(true)
         {
-            print(Vector3.Distance(transform.position, currentWaypoint));
             if(Vector3.Distance(transform.position, currentWaypoint) <= 0.01f)
             {
                 targetIndex++;
                 if(targetIndex == path.Length)
                 {
-                    print("End");
                     yield break;
                 }
                 currentWaypoint = path[targetIndex];

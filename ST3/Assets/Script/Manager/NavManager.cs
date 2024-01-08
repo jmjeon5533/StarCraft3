@@ -22,8 +22,8 @@ public class NavManager : MonoBehaviour
     Queue<PathRequest> RequestQueue = new Queue<PathRequest>();
     PathRequest currentRequest;
 
-    static NavManager instance;
-    PathFinding pathFinding;
+    public static NavManager instance;
+    public PathFinding pathFinding;
 
     bool isProcessingPath;
 

@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class IngameManager : MonoBehaviour
 {
-    public static IngameManager instance {get; private set;}
+    public static IngameManager instance { get; private set; }
+    public KeyInfo keyInfo;
     [Header("카메라")]
     [SerializeField] Transform camPivot;
     [SerializeField] Camera cam;
@@ -14,7 +15,8 @@ public class IngameManager : MonoBehaviour
     [SerializeField] float scrollValue;
     [Space(10)]
     [Header("유닛 관련")]
-    [SerializeField] List<Unit> curUnit = new List<Unit>();
+    public List<Unit> curUnit = new List<Unit>();
+    
     public bool IsUnitSelect()
     {
         return curUnit.Count > 0;
@@ -22,58 +24,34 @@ public class IngameManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+        keyInfo = new KeyInfo();
     }
     void Start()
     {
         scrollValue = 0.5f;
+        keyInfo.curState = keyInfo.MoveMode;
     }
 
     // Update is called once per frame
     void Update()
     {
         CamInput();
-        MouseInput();
+        PlayerInput();
+        
     }
-    void MouseInput()
+    void PlayerInput()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity))
-            {
-                switch(hit.collider.gameObject.tag)
-                {
-                    case "Ground":
-                    case "Wall":
-                    case "Untagged":
-                    {
-                        curUnit.Clear();
-                        break;
-                    }
-                    case "Unit":
-                    {
-                        curUnit.Add(hit.collider.GetComponent<Unit>());
-                        break;
-                    }
-                }
-            }
+            keyInfo.curState.LeftClick();
         }
         if (Input.GetMouseButtonDown(1))
         {
-            if(curUnit == null) return;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
-            {
-                if (hit.collider)
-                {
-                    foreach(var unit in curUnit)
-                    {
-                        unit.Move(hit.point);
-                    }
-                }
-            }
+            keyInfo.curState.RightClick();
+        }
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            keyInfo.curState = keyInfo.MoveMode;
         }
     }
     void CamInput()

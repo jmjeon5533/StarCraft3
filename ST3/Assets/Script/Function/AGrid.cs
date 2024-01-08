@@ -8,7 +8,7 @@ public class AGrid : MonoBehaviour
     public LayerMask unwalkAbleMask;
     public Vector2 gridWorldSize;
     public float nodeRadius;
-    ANode[,] grid;
+    public ANode[,] grid;
 
     float nodeDiameter;
     int gridSizeX;
