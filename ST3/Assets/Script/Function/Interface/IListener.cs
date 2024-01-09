@@ -11,5 +11,5 @@ public enum Event_Type
 
 public interface IListener
 {
-    public void OnNotify(EventType type, Component sender, object param = null);
+    public void OnNotify(Event_Type type, Component sender, object param = null);
 }
