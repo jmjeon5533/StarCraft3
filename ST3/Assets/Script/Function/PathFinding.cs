@@ -24,8 +24,8 @@ public class PathFinding : MonoBehaviour
         Vector3[] waypoint = new Vector3[0];
         bool pathSuccess = false;
 
-        ANode startNode = grid.GetNodeFromWorldPoint(startpos);
-        ANode targetNode = grid.GetNodeFromWorldPoint(targetPos);
+        ANode startNode = grid.GetNodeWalkWorldPoint(startpos);
+        ANode targetNode = grid.GetNodeWalkWorldPoint(targetPos);
 
         if (startNode.isWalkAble && targetNode.isWalkAble)
         {

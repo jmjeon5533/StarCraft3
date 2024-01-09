@@ -16,7 +16,7 @@ public class IngameManager : MonoBehaviour
     [Space(10)]
     [Header("유닛 관련")]
     public List<Unit> curUnit = new List<Unit>();
-    
+
     public bool IsUnitSelect()
     {
         return curUnit.Count > 0;
@@ -29,7 +29,11 @@ public class IngameManager : MonoBehaviour
     void Start()
     {
         scrollValue = 0.5f;
-        keyInfo.curState = keyInfo.MoveMode;
+        InitMode(keyInfo.MoveMode);
+    }
+    public void InitMode(IClick mode)
+    {
+        keyInfo.curState = mode;
     }
 
     // Update is called once per frame
@@ -37,7 +41,7 @@ public class IngameManager : MonoBehaviour
     {
         CamInput();
         PlayerInput();
-        
+
     }
     void PlayerInput()
     {
@@ -49,9 +53,9 @@ public class IngameManager : MonoBehaviour
         {
             keyInfo.curState.RightClick();
         }
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            keyInfo.curState = keyInfo.MoveMode;
+            InitMode(keyInfo.MoveMode);
         }
     }
     void CamInput()

@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 public interface IClick
 {
+    public void Init();
     public void LeftClick();
     public void RightClick();
 }
 public class MoveMode : IClick
 {
+    public void Init()
+    {
+
+    }
     public void LeftClick()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -33,6 +38,7 @@ public class MoveMode : IClick
     }
     public void RightClick()
     {
+        
         if (IngameManager.instance.curUnit == null) return;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -59,10 +65,15 @@ public class MoveMode : IClick
             }
     }   
 }
-public class NormalBuildMode : IClick
+public class BuildMode : IClick
 {
+    public void Init()
+    {
+        
+    }
     public void LeftClick()
     {
+        
          Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, Mathf.Infinity))
@@ -83,27 +94,14 @@ public class NormalBuildMode : IClick
 
     }
 }
-public class AdvanceBuildMode : IClick
-{
-    public void LeftClick()
-    {
-
-    }
-    public void RightClick()
-    {
-
-    }
-}
 public class KeyInfo
 {
     public readonly IClick MoveMode;
     public readonly IClick normalBuildMode;
-    public readonly IClick advanceBuildMode;
     public KeyInfo()
     {
         MoveMode = new MoveMode();
-        normalBuildMode = new NormalBuildMode();
-        advanceBuildMode = new AdvanceBuildMode();
+        normalBuildMode = new BuildMode();
 
         curState = MoveMode;
     }

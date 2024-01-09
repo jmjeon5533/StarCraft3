@@ -12,15 +12,15 @@ public class UIManager : MonoBehaviour
     {
         var i = IngameManager.instance;
         normalbuildBtn.onClick.AddListener(()=>{
-            i.keyInfo.curState = i.keyInfo.normalBuildMode;
+            i.InitMode(i.keyInfo.normalBuildMode);
         });
         advancebuildBtn.onClick.AddListener(()=>{
-            i.keyInfo.curState = i.keyInfo.advanceBuildMode;
+            
         });
     }
     private void Update()
     {
-        var g = IngameManager.instance;
-        unitInfo.SetActive(g.IsUnitSelect());
+        var i = IngameManager.instance;
+        unitInfo.SetActive(i.IsUnitSelect());
     }
 }
