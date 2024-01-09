@@ -34,6 +34,7 @@ public class Miner : Unit
             if(curMiningTime >= 3)
             {
                 haveMineral = targetMineral.GetMineral(5);
+                
             }
         }
     }

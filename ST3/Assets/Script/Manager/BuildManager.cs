@@ -18,15 +18,15 @@ public class BuildManager : MonoBehaviour
     List<Build> curBuilding = new List<Build>();
     public void CreateBuild(string buildKey, Vector3 targetPos)
     {
-        var UseGrid = grid.GetNodeFromWorldPoint(targetPos);
+        var UseGrid = grid.GetNodeBuildWorldPoint(targetPos);
         var obj = Instantiate(buildDic[buildKey], UseGrid.worldPos, Quaternion.identity).transform;
         
-        Vector2Int scale = new Vector2Int(Mathf.RoundToInt(obj.localScale.x * grid.nodeRadius * 15),
-        Mathf.RoundToInt(obj.localScale.z * grid.nodeRadius * 15));
+        Vector2Int scale = new Vector2Int(Mathf.RoundToInt(obj.localScale.x * 5 + 1),
+        Mathf.RoundToInt(obj.localScale.z * 5 + 1));
 
 
-        Vector2Int cGridPos = new Vector2Int(UseGrid.gridX - Mathf.RoundToInt(scale.x)
-        ,UseGrid.gridY - Mathf.RoundToInt(scale.y));
+        Vector2Int cGridPos = new Vector2Int(UseGrid.gridX - Mathf.RoundToInt(scale.x / 2)
+        ,UseGrid.gridY - Mathf.RoundToInt(scale.y / 2));
 
         print($"{scale}, {UseGrid.gridX}:{UseGrid.gridY}, {cGridPos}");
         
@@ -34,9 +34,9 @@ public class BuildManager : MonoBehaviour
         {
             for (int j = 0; j < scale.y; j++)
             {
-                var g = grid.grid[cGridPos.x + i, cGridPos.y + j];
+                var g = grid.buildGrid[cGridPos.x + i, cGridPos.y + j];
                 print($"Grid = {g.gridX},{g.gridY}");
-                g.isWalkAble = g.SerchWalkAble(g.worldPos,grid.nodeRadius,grid.unwalkAbleMask);
+                g.isWalkAble = g.SerchWalkAble(g.worldPos,0.1f,grid.unwalkAbleMask);
             }
         }
         UseGrid.isWalkAble = false;
