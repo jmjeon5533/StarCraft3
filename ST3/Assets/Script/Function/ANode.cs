@@ -21,6 +21,12 @@ public class ANode
         gridY = nGridY;
     }
 
+    public bool SerchWalkAble(Vector3 pos, float nodeRadius, LayerMask layerMask)
+    {
+        Collider[] colliders = Physics.OverlapSphere(pos, nodeRadius,layerMask);
+        return colliders.Length <= 0;
+    }
+
     public int fCost
     {
         get { return gCost + hCost; }

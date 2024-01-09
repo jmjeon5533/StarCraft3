@@ -63,6 +63,7 @@ public class NormalBuildMode : IClick
 {
     public void LeftClick()
     {
+        
          Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, Mathf.Infinity))
@@ -83,27 +84,14 @@ public class NormalBuildMode : IClick
 
     }
 }
-public class AdvanceBuildMode : IClick
-{
-    public void LeftClick()
-    {
-
-    }
-    public void RightClick()
-    {
-
-    }
-}
 public class KeyInfo
 {
     public readonly IClick MoveMode;
     public readonly IClick normalBuildMode;
-    public readonly IClick advanceBuildMode;
     public KeyInfo()
     {
         MoveMode = new MoveMode();
         normalBuildMode = new NormalBuildMode();
-        advanceBuildMode = new AdvanceBuildMode();
 
         curState = MoveMode;
     }

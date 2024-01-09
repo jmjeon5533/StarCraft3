@@ -21,13 +21,22 @@ public class BuildManager : MonoBehaviour
         var UseGrid = grid.GetNodeFromWorldPoint(targetPos);
         var obj = Instantiate(buildDic[buildKey], UseGrid.worldPos, Quaternion.identity).transform;
         
-        Vector2Int cGridPos = new Vector2Int(UseGrid.gridX - Mathf.RoundToInt(obj.localScale.x * 2.5f)
-        ,UseGrid.gridY - Mathf.RoundToInt(obj.localScale.z * 2.5f)); 
-        for (int i = 0; i < Mathf.RoundToInt(obj.localScale.x * 5); i++)
+        Vector2Int scale = new Vector2Int(Mathf.RoundToInt(obj.localScale.x * grid.nodeRadius * 15),
+        Mathf.RoundToInt(obj.localScale.z * grid.nodeRadius * 15));
+
+
+        Vector2Int cGridPos = new Vector2Int(UseGrid.gridX - Mathf.RoundToInt(scale.x)
+        ,UseGrid.gridY - Mathf.RoundToInt(scale.y));
+
+        print($"{scale}, {UseGrid.gridX}:{UseGrid.gridY}, {cGridPos}");
+        
+        for (int i = 0; i < scale.x; i++)
         {
-            for (int j = 0; j < Mathf.RoundToInt(obj.localScale.z * 5); j++)
+            for (int j = 0; j < scale.y; j++)
             {
-                grid.grid[cGridPos.x + i, cGridPos.y + j].isWalkAble = false;
+                var g = grid.grid[cGridPos.x + i, cGridPos.y + j];
+                print($"Grid = {g.gridX},{g.gridY}");
+                g.isWalkAble = g.SerchWalkAble(g.worldPos,grid.nodeRadius,grid.unwalkAbleMask);
             }
         }
         UseGrid.isWalkAble = false;
