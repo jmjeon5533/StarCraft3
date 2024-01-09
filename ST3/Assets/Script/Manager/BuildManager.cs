@@ -19,14 +19,20 @@ public class BuildManager : MonoBehaviour
     public void CreateBuild(string buildKey, Vector3 targetPos)
     {
         var UseGrid = grid.GetNodeBuildWorldPoint(targetPos);
-        var obj = Instantiate(buildDic[buildKey], UseGrid.worldPos, Quaternion.identity).transform;
-        
-        Vector2Int scale = new Vector2Int(Mathf.RoundToInt(obj.localScale.x * 5 + 1),
-        Mathf.RoundToInt(obj.localScale.z * 5 + 1));
-
+        Build build;
+        buildDic[buildKey].TryGetComponent(out build);
+        Vector2Int scale = build.buildingSize;
+       
 
         Vector2Int cGridPos = new Vector2Int(UseGrid.gridX - Mathf.RoundToInt(scale.x / 2)
         ,UseGrid.gridY - Mathf.RoundToInt(scale.y / 2));
+
+        if (!CheckBuildNodes(cGridPos, scale))
+        {
+            Debug.Log("Cannot Build this area");
+            return;
+        }
+        Instantiate(buildDic[buildKey], UseGrid.worldPos, Quaternion.identity);
 
         print($"{scale}, {UseGrid.gridX}:{UseGrid.gridY}, {cGridPos}");
         
@@ -42,6 +48,20 @@ public class BuildManager : MonoBehaviour
         UseGrid.isWalkAble = false;
         curBuilding.Add(buildDic[buildKey]);
     }
+
+    public bool CheckBuildNodes(Vector2Int centerPos, Vector2Int scale)
+    {
+        for (int i = 0; i < scale.x; i++)
+        {
+            for (int j = 0; j < scale.y; j++)
+            {
+                var g = grid.buildGrid[centerPos.x + i, centerPos.y + j];
+                if(!g.isWalkAble) return false;
+            }
+        }
+        return true;
+    }
+
     private void Awake()
     {
         instance = this;
