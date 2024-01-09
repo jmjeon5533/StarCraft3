@@ -42,7 +42,7 @@ public class MoveMode : IClick
         if (IngameManager.instance.curUnit == null) return;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
             {
                 if (hit.collider)
                 {
@@ -76,7 +76,7 @@ public class BuildMode : IClick
         
          Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity,LayerMask.GetMask("Ground")))
             {
                 switch(hit.collider.gameObject.tag)
                 {

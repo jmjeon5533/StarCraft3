@@ -14,6 +14,44 @@ public class BuildManager : MonoBehaviour
     Dictionary<string, Build> buildDic = new Dictionary<string, Build>();
     [SerializeField] buildInfo[] buildList;
     [SerializeField] AGrid grid;
+    [SerializeField] Grid buildGrid;
+
+    [SerializeField] Camera cam;
+
+    private GameObject previewBuild;
+
+    public void ShowBuild(string buildKey)
+    {
+        Vector3Int gridPosition = Vector3Int.zero;
+        Vector3 mousePos = Input.mousePosition;
+        mousePos.z = cam.nearClipPlane;
+        Ray ray = cam.ScreenPointToRay(mousePos);
+        RaycastHit hit;
+        if(Physics.Raycast(ray, out hit,100))
+        {
+            gridPosition = buildGrid.WorldToCell(hit.point);
+        }
+
+        if(previewBuild == null)
+            previewBuild = Instantiate(buildDic[buildKey], gridPosition, Quaternion.identity).gameObject;
+        MeshRenderer meshRenderer;
+        previewBuild.TryGetComponent(out meshRenderer);
+        Color color = meshRenderer.material.GetColor("_Color");
+        meshRenderer.material.SetColor("_Color", new Color(color.r,color.g,color.b,0.4f));
+        previewBuild.transform.position = buildGrid.CellToWorld(gridPosition);
+    }
+
+    public bool CheckBuildMode()
+    {
+        var g = IngameManager.instance;
+        if (g.keyInfo.curState.GetType() == typeof(BuildMode))
+        {
+            return true;
+        } else
+        {
+            return false;
+        }
+    }
 
     List<Build> curBuilding = new List<Build>();
     public void CreateBuild(string buildKey, Vector3 targetPos)
@@ -71,6 +109,16 @@ public class BuildManager : MonoBehaviour
         foreach (var b in buildList)
         {
             buildDic.Add(b.key, b.value);
+        }
+        buildGrid.cellSize = new Vector3(grid.BuildNodeDiameter, 0, grid.BuildNodeDiameter);
+    }
+
+    private void Update()
+    {
+        if(CheckBuildMode())
+        {
+            Debug.Log("Test");
+            ShowBuild("Command");
         }
     }
 }
