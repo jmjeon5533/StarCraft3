@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EventType
+public enum Event_Type
 {
     TargetToMoveEvent,
     TargetToAttckEvent,
