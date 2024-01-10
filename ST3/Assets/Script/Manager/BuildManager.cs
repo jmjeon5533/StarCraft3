@@ -13,34 +13,48 @@ public class BuildManager : MonoBehaviour
     public static BuildManager instance { get; private set; }
     Dictionary<string, Build> buildDic = new Dictionary<string, Build>();
     [SerializeField] buildInfo[] buildList;
-    [SerializeField] AGrid grid;
+    public AGrid grid;
 
     List<Build> curBuilding = new List<Build>();
     public void CreateBuild(string buildKey, Vector3 targetPos)
     {
-        var UseGrid = grid.GetNodeBuildWorldPoint(targetPos);
-        var obj = Instantiate(buildDic[buildKey], UseGrid.worldPos, Quaternion.identity).transform;
-        
-        Vector2Int scale = new Vector2Int(Mathf.RoundToInt(obj.localScale.x * 5 + 1),
-        Mathf.RoundToInt(obj.localScale.z * 5 + 1));
+        var UseGrid = grid.GetNodeWorldPoint(targetPos);
+        var BuildScale = buildDic[buildKey].BuildScale;
 
+        Vector2Int cGridPos = new Vector2Int(UseGrid.gridX - Mathf.RoundToInt(BuildScale.x / 2)
+        ,UseGrid.gridY - Mathf.RoundToInt(BuildScale.y / 2));
 
-        Vector2Int cGridPos = new Vector2Int(UseGrid.gridX - Mathf.RoundToInt(scale.x / 2)
-        ,UseGrid.gridY - Mathf.RoundToInt(scale.y / 2));
-
-        print($"{scale}, {UseGrid.gridX}:{UseGrid.gridY}, {cGridPos}");
-        
-        for (int i = 0; i < scale.x; i++)
+        if(!CheckWalkable(cGridPos,BuildScale))
         {
-            for (int j = 0; j < scale.y; j++)
+            print("Don't Build");
+            return;
+        }
+        var obj = Instantiate(buildDic[buildKey], UseGrid.worldPos, Quaternion.identity);
+
+        print($"{obj.BuildScale}, {UseGrid.gridX}:{UseGrid.gridY}, {cGridPos}");
+        
+        for (int i = 0; i < obj.BuildScale.x; i++)
+        {
+            for (int j = 0; j < obj.BuildScale.y; j++)
             {
-                var g = grid.buildGrid[cGridPos.x + i, cGridPos.y + j];
-                print($"Grid = {g.gridX},{g.gridY}");
-                g.isWalkAble = g.SerchWalkAble(g.worldPos,0.1f,grid.unwalkAbleMask);
+                var g = grid.grid[cGridPos.x + i, cGridPos.y + j];
+                g.isWalkAble = false;
             }
         }
         UseGrid.isWalkAble = false;
         curBuilding.Add(buildDic[buildKey]);
+    }
+    bool CheckWalkable(Vector2Int leftDownPos, Vector2Int scale)
+    {
+        for (int i = 0; i < scale.x; i++)
+        {
+            for (int j = 0; j < scale.y; j++)
+            {
+                var g = grid.grid[leftDownPos.x + i, leftDownPos.y + j];
+                if(!g.isWalkAble) return false;
+            }
+        }
+        return true;
     }
     private void Awake()
     {

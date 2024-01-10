@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Build : Unit
 {
+    public Vector2Int BuildScale;
     public override void Move(RaycastHit hit)
     {
         

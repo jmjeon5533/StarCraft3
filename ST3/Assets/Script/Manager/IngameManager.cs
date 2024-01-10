@@ -34,6 +34,8 @@ public class IngameManager : MonoBehaviour
     public void InitMode(IClick mode)
     {
         keyInfo.curState = mode;
+        keyInfo.curState.Init();
+        ObserverManager.instance.NotifyToSubscriber();
     }
 
     // Update is called once per frame

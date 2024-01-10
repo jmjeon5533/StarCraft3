@@ -73,7 +73,6 @@ public class BuildMode : IClick
     }
     public void LeftClick()
     {
-        
          Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, Mathf.Infinity))
@@ -87,6 +86,7 @@ public class BuildMode : IClick
                     }
                     default : return;
                 }
+                ObserverManager.instance.NotifyToSubscriber();
             }
     }
     public void RightClick()

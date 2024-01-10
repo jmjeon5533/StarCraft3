@@ -9,31 +9,27 @@ public class AGrid : MonoBehaviour
     public Vector2 gridWorldSize;
     float nodeRadius = 0.1f;
     public ANode[,] grid;
-    public ANode[,] buildGrid;
 
     float nodeDiameter;
-    float buildNodeDiameter;
     int gridSizeX;
     int gridSizeY;
 
-    int buildGridSizeX;
-    int buildGridSizeY;
+
 
     void Start()
     {
         nodeDiameter = nodeRadius * 2;
-        buildNodeDiameter = nodeDiameter * 2;
         gridSizeX = Mathf.RoundToInt(gridWorldSize.x / nodeDiameter);
         gridSizeY = Mathf.RoundToInt(gridWorldSize.y / nodeDiameter);
 
-        buildGridSizeX = Mathf.RoundToInt(gridWorldSize.x / buildNodeDiameter) + 1;
-        buildGridSizeY = Mathf.RoundToInt(gridWorldSize.y / buildNodeDiameter) + 1;
+   
         CreateGrid();
     }
     void CreateGrid()
     {
+        var u = UIManager.instance;
         grid = new ANode[gridSizeX, gridSizeY];
-        buildGrid = new ANode[buildGridSizeX, buildGridSizeY];
+        u.UIgrids = new UnityEngine.UI.Image[gridSizeX, gridSizeY];
         
         Vector3 worldBottomLeft = transform.position - Vector3.right * gridWorldSize.x
          / 2 - Vector3.forward * gridWorldSize.y / 2;
@@ -45,15 +41,8 @@ public class AGrid : MonoBehaviour
                 worldPoint = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius) + Vector3.forward * (y * nodeDiameter + nodeRadius);
                 bool walkable = !Physics.CheckSphere(worldPoint, nodeRadius, unwalkAbleMask);
                 grid[x, y] = new ANode(walkable, worldPoint, x, y);
-            }
-        }
-        for(int x = 0; x < buildGridSizeX; x++)
-        {
-            for(int y = 0; y < buildGridSizeY; y++)
-            {
-                worldPoint = worldBottomLeft + Vector3.right * (x * buildNodeDiameter + nodeRadius * 2) + Vector3.forward * (y * buildNodeDiameter + nodeRadius * 2);
-                bool buildAble = !Physics.CheckSphere(worldPoint, nodeRadius * 3, unwalkAbleMask);
-                buildGrid[x,y] = new ANode(buildAble, worldPoint, x, y);
+                u.UIgrids[x,y] = Instantiate(u.baseNodeImg,u.gridCanvas);
+                u.UIgrids[x,y].rectTransform.anchoredPosition = new Vector2(worldPoint.x,worldPoint.z);
             }
         }
     }
@@ -78,7 +67,7 @@ public class AGrid : MonoBehaviour
         }
         return neighbours;
     }
-    public ANode GetNodeWalkWorldPoint(Vector3 worldPosition)
+    public ANode GetNodeWorldPoint(Vector3 worldPosition)
     {
         float percentX = (worldPosition.x + gridWorldSize.x / 2) / gridWorldSize.x;
         float percentY = (worldPosition.z + gridWorldSize.y / 2) / gridWorldSize.y;
@@ -89,17 +78,7 @@ public class AGrid : MonoBehaviour
         int y = Mathf.RoundToInt((gridSizeY - 1) * percentY);
         return grid[x, y];
     }
-    public ANode GetNodeBuildWorldPoint(Vector3 worldPosition)
-    {
-        float percentX = (worldPosition.x + gridWorldSize.x / 2) / gridWorldSize.x;
-        float percentY = (worldPosition.z + gridWorldSize.y / 2) / gridWorldSize.y;
-        percentX = Mathf.Clamp01(percentX);
-        percentY = Mathf.Clamp01(percentY);
 
-        int x = Mathf.RoundToInt((buildGridSizeX - 1) * percentX);
-        int y = Mathf.RoundToInt((buildGridSizeY - 1) * percentY);
-        return buildGrid[x, y];
-    }
 
     private void OnDrawGizmos()
     {
@@ -114,15 +93,6 @@ public class AGrid : MonoBehaviour
                         Gizmos.color = Color.black;
                         
                 Gizmos.DrawCube(n.worldPos, Vector3.one * (nodeDiameter - 0.1f));
-            }
-            foreach(ANode n in buildGrid)
-            {
-                Gizmos.color = n.isWalkAble ? Color.white : Color.green;
-                if(path != null)
-                    if(path.Contains(n))
-                        Gizmos.color = Color.black;
-                        
-                Gizmos.DrawCube(n.worldPos + Vector3.up, Vector3.one * (nodeDiameter - 0.1f) * 2);
             }
         }
     }
