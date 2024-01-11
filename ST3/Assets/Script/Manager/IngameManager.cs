@@ -34,8 +34,8 @@ public class IngameManager : MonoBehaviour
     public void InitMode(IClick mode)
     {
         keyInfo.curState = mode;
-        keyInfo.curState.Init();
         ObserverManager.instance.NotifyToSubscriber();
+        keyInfo.Init();
     }
 
     // Update is called once per frame
@@ -43,17 +43,17 @@ public class IngameManager : MonoBehaviour
     {
         CamInput();
         PlayerInput();
-
+        keyInfo.Loop();
     }
     void PlayerInput()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            keyInfo.curState.LeftClick();
+            keyInfo.LeftClick();
         }
         if (Input.GetMouseButtonDown(1))
         {
-            keyInfo.curState.RightClick();
+            keyInfo.RightClick();
         }
         if (Input.GetKeyDown(KeyCode.Escape))
         {

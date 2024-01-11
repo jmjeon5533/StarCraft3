@@ -15,11 +15,11 @@ public class UIManager : MonoBehaviour, ISubscriber
     private void Awake()
     {
         instance = this;
-        ObserverManager.instance.AddSubscriber(this);
     }
     private void Start()
     {
         var i = IngameManager.instance;
+        ObserverManager.instance.AddSubscriber(this);
         normalbuildBtn.onClick.AddListener(()=>{
             i.InitMode(i.keyInfo.normalBuildMode);
         });

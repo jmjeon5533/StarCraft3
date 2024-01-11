@@ -12,7 +12,10 @@ public class BuildManager : MonoBehaviour
 {
     public static BuildManager instance { get; private set; }
     Dictionary<string, Build> buildDic = new Dictionary<string, Build>();
+    [SerializeField] public Build selectBuildInfo;
     [SerializeField] buildInfo[] buildList;
+    [SerializeField] GameObject selectGhost;
+    [SerializeField] Material ghostMaterial;
     public AGrid grid;
 
     List<Build> curBuilding = new List<Build>();
@@ -44,7 +47,11 @@ public class BuildManager : MonoBehaviour
         UseGrid.isWalkAble = false;
         curBuilding.Add(buildDic[buildKey]);
     }
-    bool CheckWalkable(Vector2Int leftDownPos, Vector2Int scale)
+    public Build GetBuildDic(string key)
+    {
+        return buildDic[key];
+    }
+    public bool CheckWalkable(Vector2Int leftDownPos, Vector2Int scale)
     {
         for (int i = 0; i < scale.x; i++)
         {
@@ -56,6 +63,26 @@ public class BuildManager : MonoBehaviour
         }
         return true;
     }
+    public void GhostInit(bool isActive, Vector2Int scale = default)
+    {
+        selectGhost.SetActive(isActive);
+        selectGhost.transform.localScale = new Vector3(scale.x,3,scale.y) * 0.2f;
+    }
+    public void GhostMove(Vector3 pos)
+    {
+        var gridPos = grid.GetNodeWorldPoint(pos);
+        selectGhost.transform.position = gridPos.worldPos;
+
+        Vector2Int cGridPos = 
+        new Vector2Int(gridPos.gridX - Mathf.RoundToInt(selectBuildInfo.BuildScale.x / 2)
+        ,gridPos.gridY - Mathf.RoundToInt(selectBuildInfo.BuildScale.y / 2));
+
+        Color WalkableColor = new Color(0.25f,1,1,0.5f);
+        Color WalkUnableColor = new Color(1,0,0,0.5f);
+
+        ghostMaterial.color = CheckWalkable(cGridPos,selectBuildInfo.BuildScale) 
+        ? WalkableColor : WalkUnableColor;
+    }
     private void Awake()
     {
         instance = this;
@@ -66,5 +93,9 @@ public class BuildManager : MonoBehaviour
         {
             buildDic.Add(b.key, b.value);
         }
+    }
+    private void Update()
+    {
+        
     }
 }
