@@ -1709,16 +1709,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitInfo: {fileID: 1538026215}
-  Btn:
-  - {fileID: 6755476}
-  - {fileID: 1099479525}
-  - {fileID: 1280983347}
-  - {fileID: 340292976}
-  - {fileID: 1584936060}
-  - {fileID: 1197590934}
-  - {fileID: 1108324764}
-  - {fileID: 93188223}
-  - {fileID: 1923587177}
+  normalbuildBtn: {fileID: 6755476}
+  advancebuildBtn: {fileID: 1099479525}
   baseNodeImg: {fileID: 4705785031825511002, guid: acc69d80c9b67e04fb3f05567c3f51ff, type: 3}
   gridCanvas: {fileID: 1669216959}
 --- !u!4 &1179359701
@@ -1773,6 +1765,7 @@ MonoBehaviour:
   camSpeed: 25
   scrollValue: 0
   curUnit: []
+  curUnitIndex: 0
 --- !u!4 &1197134544
 Transform:
   m_ObjectHideFlags: 0
@@ -2936,7 +2929,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 
+  m_Text: "\uAE30\uBCF8"
 --- !u!222 &1915107774
 CanvasRenderer:
   m_ObjectHideFlags: 0

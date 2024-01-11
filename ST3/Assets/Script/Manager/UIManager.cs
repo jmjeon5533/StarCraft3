@@ -22,12 +22,12 @@ public class UIManager : MonoBehaviour, ISubscriber
         var i = IngameManager.instance;
         ObserverManager.instance.AddSubscriber(this);
         normalbuildBtn.onClick.AddListener(()=>{
-            i.InitMode(i.keyInfo.normalBuildMode);
+            i.InitMode(i.keyInfo.BuildMode);
         });
         advancebuildBtn.onClick.AddListener(()=>{
             
         });
-        Notify();
+        TotalInit();
     }
     private void Update()
     {
@@ -48,16 +48,16 @@ public class UIManager : MonoBehaviour, ISubscriber
             }
         }
     }
-    public void UnitUI(List<ButtonConstructor> skillList)
-    {
-        var g = IngameManager.instance;
-        for(int i = 0; i < Btn.Length; i++)
-        {
-            var num = i;
-            Btn[num].onClick.RemoveAllListeners();
-            Btn[num].onClick.AddListener(() => {
-                skillList[num].Action();
-            });
-        }
-    }
+    // public void UnitUI(List<ButtonConstructor> skillList)
+    // {
+    //     var g = IngameManager.instance;
+    //     for(int i = 0; i < Btn.Length; i++)
+    //     {
+    //         var num = i;
+    //         Btn[num].onClick.RemoveAllListeners();
+    //         Btn[num].onClick.AddListener(() => {
+    //             skillList[num].Action();
+    //         });
+    //     }
+    // }
 }
