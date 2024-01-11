@@ -10,7 +10,7 @@ public interface ISignal
 }
 public interface ISubscriber
 {
-    public void Notify();
+    public void TotalInit();
 }
 public class ObserverManager : MonoBehaviour, ISignal
 {
@@ -31,6 +31,6 @@ public class ObserverManager : MonoBehaviour, ISignal
     }
     public void NotifyToSubscriber()
     {
-        foreach (var subs in subscribers) subs.Notify();
+        foreach (var subs in subscribers) subs.TotalInit();
     }
 }

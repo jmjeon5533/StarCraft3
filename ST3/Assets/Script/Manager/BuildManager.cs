@@ -68,7 +68,7 @@ public class BuildManager : MonoBehaviour
         selectGhost.SetActive(isActive);
         selectGhost.transform.localScale = new Vector3(scale.x,3,scale.y) * 0.2f;
     }
-    public void GhostMove(Vector3 pos)
+    public void GhostGridMove(Vector3 pos)
     {
         var gridPos = grid.GetNodeWorldPoint(pos);
         selectGhost.transform.position = gridPos.worldPos;
@@ -82,6 +82,13 @@ public class BuildManager : MonoBehaviour
 
         ghostMaterial.color = CheckWalkable(cGridPos,selectBuildInfo.BuildScale) 
         ? WalkableColor : WalkUnableColor;
+    }
+    public void GhostWorldMove(Vector3 pos)
+    {
+        selectGhost.transform.position = pos;
+        Color WalkUnableColor = new Color(1,0,0,0.5f);
+
+        ghostMaterial.color = WalkUnableColor;
     }
     private void Awake()
     {

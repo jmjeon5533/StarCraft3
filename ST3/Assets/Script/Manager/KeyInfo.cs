@@ -111,19 +111,24 @@ public class BuildMode : IClick
             {
                 if (hit.collider.CompareTag("Ground"))
                 {
-                    BuildManager.instance.GhostMove(hit.point);
+                    BuildManager.instance.GhostGridMove(hit.point);
+                }
+                else
+                {
+                    BuildManager.instance.GhostWorldMove(hit.point);
                 }
             }
+
     }
 }
 public class KeyInfo
 {
     public readonly IClick MoveMode;
-    public readonly IClick normalBuildMode;
+    public readonly IClick BuildMode;
     public KeyInfo()
     {
         MoveMode = new MoveMode();
-        normalBuildMode = new BuildMode();
+        BuildMode = new BuildMode();
 
         curState = MoveMode;
     }

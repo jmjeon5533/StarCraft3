@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,7 +34,7 @@ public class UIManager : MonoBehaviour, ISubscriber
         var i = IngameManager.instance;
         unitInfo.SetActive(i.IsUnitSelect());
     }
-    public void Notify()
+    public void TotalInit()
     {
         var i = IngameManager.instance;
         var b = BuildManager.instance;
@@ -45,6 +46,18 @@ public class UIManager : MonoBehaviour, ISubscriber
                 bool isWalk = b.grid.grid[x,y].isWalkAble;
                 UIgrids[x,y].color = isWalk ? new Color(0,1,1,0.5f) : new Color(1,0,0,0.5f);
             }
+        }
+    }
+    public void UnitUI(List<ButtonConstructor> skillList)
+    {
+        var g = IngameManager.instance;
+        for(int i = 0; i < Btn.Length; i++)
+        {
+            var num = i;
+            Btn[num].onClick.RemoveAllListeners();
+            Btn[num].onClick.AddListener(() => {
+                skillList[num].Action();
+            });
         }
     }
 }

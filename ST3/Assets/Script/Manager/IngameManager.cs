@@ -16,6 +16,7 @@ public class IngameManager : MonoBehaviour
     [Space(10)]
     [Header("유닛 관련")]
     public List<Unit> curUnit = new List<Unit>();
+    public int curUnitIndex = 0;
 
     public bool IsUnitSelect()
     {
