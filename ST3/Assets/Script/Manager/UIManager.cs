@@ -44,7 +44,7 @@ public class UIManager : MonoBehaviour, ISubscriber
             {
                 UIgrids[x,y].enabled = i.keyInfo.curState != i.keyInfo.MoveMode;
                 bool isWalk = b.grid.grid[x,y].isWalkAble;
-                UIgrids[x,y].color = isWalk ? new Color(0,1,1,0.5f) : new Color(1,0,0,0.5f);
+                UIgrids[x,y].color = isWalk ? new Color(0.7f,0.7f,0.7f,0.5f) : new Color(1,0,0,0.5f);
             }
         }
     }

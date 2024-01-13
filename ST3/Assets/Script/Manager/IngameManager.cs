@@ -65,7 +65,7 @@ public class IngameManager : MonoBehaviour
     {
         scrollValue -= Input.GetAxis("Mouse ScrollWheel");
         scrollValue = Mathf.Clamp(scrollValue, 0, 1);
-        cam.transform.localPosition = new Vector3(0, 0, Mathf.Lerp(2, -3, scrollValue));
+        cam.transform.localPosition = new Vector3(0, 0, Mathf.Lerp(7, 0, scrollValue));
         camPivot.transform.localPosition += CalCulateCamMovePos() * camSpeed * Time.deltaTime;
     }
     Vector3 CalCulateCamMovePos()
