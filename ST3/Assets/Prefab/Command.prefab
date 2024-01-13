@@ -111,3 +111,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BuildScale: {x: 7, y: 7}
+  miner: {fileID: 719302184189471887, guid: d985efe5db8a20040b39e07ed9d225ad, type: 3}
+  trainDelay: 3

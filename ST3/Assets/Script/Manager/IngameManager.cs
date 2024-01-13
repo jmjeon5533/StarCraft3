@@ -22,6 +22,19 @@ public class IngameManager : MonoBehaviour
     {
         return curUnit.Count > 0;
     }
+
+    public void AddSelectUnit(Unit addUnit)
+    {
+        curUnit.Add(addUnit);
+        UIManager.instance.LoadUnitButtons(addUnit);
+    }
+
+    public void ResetSelectUnit()
+    {
+        curUnit.Clear();
+        UIManager.instance.LoadUnitButtons(null);
+    }
+
     private void Awake()
     {
         instance = this;

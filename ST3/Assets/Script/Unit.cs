@@ -9,11 +9,24 @@ public class Unit : MonoBehaviour
     protected int targetIndex;
     Coroutine curPath;
 
+    protected ButtonConstructor[] constructors = new ButtonConstructor[9];
+
     public virtual void Move(RaycastHit hit)
     {
         targetIndex = 0;
         NavManager.RequestPath(transform.position, hit.point,OnPathFound);
     }
+
+    public virtual void Skill()
+    {
+
+    }
+
+    public virtual ButtonConstructor[] ConstructButton()
+    {
+        return constructors;
+    }
+
     public void OnPathFound(Vector3[] newPath, bool pathSuccessful)
     {
         if(pathSuccessful)

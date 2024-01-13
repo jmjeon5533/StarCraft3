@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviour, ISubscriber
     [SerializeField] GameObject unitInfo;
     [SerializeField] Button normalbuildBtn;
     [SerializeField] Button advancebuildBtn;
+    [SerializeField] ControlButton[] unitInterface = new ControlButton[9];
     [HideInInspector] public Image[,] UIgrids;
     public Image baseNodeImg;
     public Transform gridCanvas;
@@ -46,6 +47,42 @@ public class UIManager : MonoBehaviour, ISubscriber
                 bool isWalk = b.grid.grid[x,y].isWalkAble;
                 UIgrids[x,y].color = isWalk ? new Color(0.7f,0.7f,0.7f,0.5f) : new Color(1,0,0,0.5f);
             }
+        }
+    }
+
+    public void LoadUnitButtons(Unit unit)
+    {
+        if(unit == null)
+        {
+            for (int i = 0; i <  unitInterface.Length; i++)
+            {
+                unitInterface[i].SetConstruct(
+                    new EmptyButton(
+                        new ButtonInfo
+                        {
+                            iconPath = "",
+                            state = ButtonPanelState.NONE,
+                        }
+                    )
+                );
+            }
+            return;
+        }
+        ButtonConstructor[] constructors = unit.ConstructButton();
+
+        for(int i = 0; i < constructors.Length; i++)
+        {
+            if(constructors[i] == null)
+            {
+                constructors[i] = new EmptyButton(
+                    new ButtonInfo
+                    {
+                        iconPath = "",
+                        state = ButtonPanelState.NONE,
+                    }
+                );
+            }
+            unitInterface[i].SetConstruct(constructors[i]);
         }
     }
     // public void UnitUI(List<ButtonConstructor> skillList)

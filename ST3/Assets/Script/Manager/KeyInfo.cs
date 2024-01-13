@@ -28,12 +28,12 @@ public class MoveMode : IClick
                     case "Wall":
                     case "Untagged":
                         {
-                            IngameManager.instance.curUnit.Clear();
+                            IngameManager.instance.ResetSelectUnit();
                             break;
                         }
                     case "Unit":
                         {
-                            IngameManager.instance.curUnit.Add(hit.collider.GetComponent<Unit>());
+                            IngameManager.instance.AddSelectUnit(hit.collider.GetComponent<Unit>());
                             break;
                         }
                 }
