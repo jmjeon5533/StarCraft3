@@ -10,6 +10,16 @@ public class AGrid : MonoBehaviour
     float nodeRadius = 0.1f;
     public ANode[,] grid;
 
+    public Vector2Int BuildGridSize
+    {
+        get { return new Vector2Int(buildGridSizeX,buildGridSizeY); }
+    }
+
+    public float BuildNodeDiameter
+    {
+        get { return buildNodeDiameter; }
+    }
+
     float nodeDiameter;
     int gridSizeX;
     int gridSizeY;
