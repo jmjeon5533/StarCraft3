@@ -2,12 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ButtonConstructor
+public abstract class ButtonConstructor
 {
-    public KeyCode keycode;
+    public KeyCode keyCode;
     public string iconKey;
-    public virtual void Action()
-    {
-        
-    }
+    public Vector2Int btnXY;
+    public abstract void Action();
 }

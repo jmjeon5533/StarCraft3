@@ -6,10 +6,14 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour, ISubscriber
 {
-    public static UIManager instance {get; private set;}
+    public static UIManager instance { get; private set; }
     [SerializeField] GameObject unitInfo;
-    [SerializeField] Button normalbuildBtn;
-    [SerializeField] Button advancebuildBtn;
+    [SerializeField] Transform selectBtnParent;
+    [SerializeField] Sprite defaultSprite;
+    Button[] selectBtns;
+    Image[] selectImages = new Image[15];
+    // [SerializeField] Button normalbuildBtn;
+    // [SerializeField] Button advancebuildBtn;
     [HideInInspector] public Image[,] UIgrids;
     public Image baseNodeImg;
     public Transform gridCanvas;
@@ -19,14 +23,20 @@ public class UIManager : MonoBehaviour, ISubscriber
     }
     private void Start()
     {
-        var i = IngameManager.instance;
+        selectBtns = selectBtnParent.GetComponentsInChildren<Button>();
+        for (int i = 0; i < 15; i++)
+        {
+            selectImages[i] = selectBtns[i].GetComponent<Image>();
+        }
         ObserverManager.instance.AddSubscriber(this);
-        normalbuildBtn.onClick.AddListener(()=>{
-            i.InitMode(i.keyInfo.BuildMode);
-        });
-        advancebuildBtn.onClick.AddListener(()=>{
-            
-        });
+        ResetUI();
+
+        // normalbuildBtn.onClick.AddListener(()=>{
+        //     i.InitMode(i.keyInfo.BuildMode);
+        // });
+        // advancebuildBtn.onClick.AddListener(()=>{
+
+        // });
         TotalInit();
     }
     private void Update()
@@ -38,14 +48,35 @@ public class UIManager : MonoBehaviour, ISubscriber
     {
         var i = IngameManager.instance;
         var b = BuildManager.instance;
-        for(int x = 0; x < UIgrids.GetLength(0); x++)
+        for (int x = 0; x < UIgrids.GetLength(0); x++)
         {
-            for(int y = 0; y < UIgrids.GetLength(1); y++)
+            for (int y = 0; y < UIgrids.GetLength(1); y++)
             {
-                UIgrids[x,y].enabled = i.keyInfo.curState != i.keyInfo.MoveMode;
-                bool isWalk = b.grid.grid[x,y].isWalkAble;
-                UIgrids[x,y].color = isWalk ? new Color(0.7f,0.7f,0.7f,0.5f) : new Color(1,0,0,0.5f);
+                UIgrids[x, y].enabled = i.keyInfo.curState != i.keyInfo.MoveMode;
+                bool isWalk = b.grid.grid[x, y].isWalkAble;
+                UIgrids[x, y].color = isWalk ? new Color(0.7f, 0.7f, 0.7f, 0.5f) : new Color(1, 0, 0, 0.5f);
             }
+        }
+    }
+    public void ResetUI()
+    {
+        for (int i = 0; i < selectBtns.Length; i++)
+        {
+            selectBtns[i].onClick.RemoveAllListeners();
+            selectImages[i].sprite = defaultSprite;
+        }
+    }
+    public void UnitUI(List<ButtonConstructor> skillList)
+    {
+        ResetUI();
+        foreach (var skill in skillList)
+        {
+            var index = skill.btnXY.y + (skill.btnXY.x * 5);
+            var btn = selectBtns[index];
+            var img = selectImages[index];
+            btn.onClick.AddListener(skill.Action);
+            string path = $"Image/ButtonIcons/{skill.iconKey}";
+            img.sprite = Resources.Load<Sprite>(path);
         }
     }
     // public void UnitUI(List<ButtonConstructor> skillList)

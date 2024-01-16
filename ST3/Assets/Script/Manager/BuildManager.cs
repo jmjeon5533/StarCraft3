@@ -18,34 +18,29 @@ public class BuildManager : MonoBehaviour
     [SerializeField] Material ghostMaterial;
     public AGrid grid;
 
-    List<Build> curBuilding = new List<Build>();
-    public void CreateBuild(string buildKey, Vector3 targetPos)
+    public List<Build> curBuilding = new List<Build>();
+    public void CreateBuild(Vector3 targetPos)
     {
+        var g = IngameManager.instance;
         var UseGrid = grid.GetNodeWorldPoint(targetPos);
-        var BuildScale = buildDic[buildKey].BuildScale;
+        var BuildScale = selectBuildInfo.BuildScale;
 
         Vector2Int cGridPos = new Vector2Int(UseGrid.gridX - Mathf.RoundToInt(BuildScale.x / 2)
-        ,UseGrid.gridY - Mathf.RoundToInt(BuildScale.y / 2));
+        , UseGrid.gridY - Mathf.RoundToInt(BuildScale.y / 2));
 
-        if(!CheckWalkable(cGridPos,BuildScale))
+        if (!CheckWalkable(cGridPos, BuildScale))
         {
             print("Don't Build");
             return;
         }
-        var obj = Instantiate(buildDic[buildKey], UseGrid.worldPos, Quaternion.identity);
+        var miner = g.curUnit[g.curUnitIndex].GetComponent<Miner>();
+        miner.buildRequest.Enqueue(new BuildRequest(selectBuildInfo,UseGrid.worldPos, cGridPos));
+        miner.Move(grid.grid[cGridPos.x - 1,cGridPos.y - 1].worldPos);
 
-        print($"{obj.BuildScale}, {UseGrid.gridX}:{UseGrid.gridY}, {cGridPos}");
+        g.InitMode(g.keyInfo.MoveMode);
+        UIManager.instance.ResetUI();
+        g.curUnit.Clear();
         
-        for (int i = 0; i < obj.BuildScale.x; i++)
-        {
-            for (int j = 0; j < obj.BuildScale.y; j++)
-            {
-                var g = grid.grid[cGridPos.x + i, cGridPos.y + j];
-                g.isWalkAble = false;
-            }
-        }
-        UseGrid.isWalkAble = false;
-        curBuilding.Add(buildDic[buildKey]);
     }
     public Build GetBuildDic(string key)
     {
@@ -58,38 +53,40 @@ public class BuildManager : MonoBehaviour
             for (int j = 0; j < scale.y; j++)
             {
                 var g = grid.grid[leftDownPos.x + i, leftDownPos.y + j];
-                if(!g.isWalkAble) return false;
+                if (!g.isWalkAble) return false;
             }
         }
         return true;
     }
+    #region GhostSet
     public void GhostInit(bool isActive, Vector2Int scale = default)
     {
         selectGhost.SetActive(isActive);
-        selectGhost.transform.localScale = new Vector3(scale.x,3,scale.y) * 0.2f;
+        selectGhost.transform.localScale = new Vector3(scale.x, 3, scale.y) * 0.2f;
     }
     public void GhostGridMove(Vector3 pos)
     {
         var gridPos = grid.GetNodeWorldPoint(pos);
         selectGhost.transform.position = gridPos.worldPos;
 
-        Vector2Int cGridPos = 
+        Vector2Int cGridPos =
         new Vector2Int(gridPos.gridX - Mathf.RoundToInt(selectBuildInfo.BuildScale.x / 2)
-        ,gridPos.gridY - Mathf.RoundToInt(selectBuildInfo.BuildScale.y / 2));
+        , gridPos.gridY - Mathf.RoundToInt(selectBuildInfo.BuildScale.y / 2));
 
-        Color WalkableColor = new Color(0.25f,1,1,0.5f);
-        Color WalkUnableColor = new Color(1,0,0,0.5f);
+        Color WalkableColor = new Color(0.25f, 1, 1, 0.5f);
+        Color WalkUnableColor = new Color(1, 0, 0, 0.5f);
 
-        ghostMaterial.color = CheckWalkable(cGridPos,selectBuildInfo.BuildScale) 
+        ghostMaterial.color = CheckWalkable(cGridPos, selectBuildInfo.BuildScale)
         ? WalkableColor : WalkUnableColor;
     }
     public void GhostWorldMove(Vector3 pos)
     {
         selectGhost.transform.position = pos;
-        Color WalkUnableColor = new Color(1,0,0,0.5f);
+        Color WalkUnableColor = new Color(1, 0, 0, 0.5f);
 
         ghostMaterial.color = WalkUnableColor;
     }
+    #endregion
     private void Awake()
     {
         instance = this;
@@ -103,6 +100,16 @@ public class BuildManager : MonoBehaviour
     }
     private void Update()
     {
-        
+
+    }
+    public void SetBuildObj(string BuildName)
+    {
+        var g = IngameManager.instance;
+        var obj = GetBuildDic(BuildName);
+
+        selectBuildInfo = obj;
+
+        GhostInit(true, obj.BuildScale);
+        g.InitMode(g.keyInfo.BuildMode);
     }
 }

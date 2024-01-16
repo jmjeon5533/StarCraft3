@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Command : Terran
 {
-    public override void Move(RaycastHit hit)
+    public override void Move(Vector3 pos, RaycastHit hit = default)
     {
         if(IsGround) return;
         targetIndex = 0;

@@ -33,7 +33,9 @@ public class MoveMode : IClick
                         }
                     case "Unit":
                         {
-                            IngameManager.instance.curUnit.Add(hit.collider.GetComponent<Unit>());
+                            var unit = hit.collider.GetComponent<Unit>();
+                            IngameManager.instance.curUnit.Add(unit);
+                            UIManager.instance.UnitUI(unit.GetButtonInfo());
                             break;
                         }
                 }
@@ -50,7 +52,7 @@ public class MoveMode : IClick
                 {
                     foreach (var unit in IngameManager.instance.curUnit)
                     {
-                        unit.Move(hit);
+                        unit.Move(hit.point,hit);
                     }
                     // switch (hit.collider.tag)
                     // {
@@ -75,14 +77,11 @@ public class BuildMode : IClick
 {
     public void Init()
     {
-        var command = BuildManager.instance.GetBuildDic("Command");
-
-        BuildManager.instance.selectBuildInfo = command;
-
-        BuildManager.instance.GhostInit(true, command.BuildScale);
+        
     }
     public void LeftClick()
     {
+        var b = BuildManager.instance;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (EventSystem.current.IsPointerOverGameObject() == false)
             if (Physics.Raycast(ray, out var hit, Mathf.Infinity))
@@ -91,7 +90,7 @@ public class BuildMode : IClick
                 {
                     case "Ground":
                         {
-                            BuildManager.instance.CreateBuild("Command", hit.point);
+                            b.CreateBuild(hit.point);
                             break;
                         }
                     default: return;
@@ -105,17 +104,18 @@ public class BuildMode : IClick
     }
     public void Loop()
     {
+        var b = BuildManager.instance;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (EventSystem.current.IsPointerOverGameObject() == false)
             if (Physics.Raycast(ray, out var hit, Mathf.Infinity))
             {
                 if (hit.collider.CompareTag("Ground"))
                 {
-                    BuildManager.instance.GhostGridMove(hit.point);
+                    b.GhostGridMove(hit.point);
                 }
                 else
                 {
-                    BuildManager.instance.GhostWorldMove(hit.point);
+                    b.GhostWorldMove(hit.point);
                 }
             }
 

@@ -59,6 +59,8 @@ public class IngameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             InitMode(keyInfo.MoveMode);
+            UIManager.instance.ResetUI();
+            curUnit.Clear();
         }
     }
     void CamInput()

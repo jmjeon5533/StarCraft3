@@ -9,10 +9,10 @@ public class Unit : MonoBehaviour
     protected int targetIndex;
     Coroutine curPath;
 
-    public virtual void Move(RaycastHit hit)
+    public virtual void Move(Vector3 pos, RaycastHit hit = default)
     {
         targetIndex = 0;
-        NavManager.RequestPath(transform.position, hit.point,OnPathFound);
+        NavManager.RequestPath(transform.position, pos,OnPathFound);
     }
     public void OnPathFound(Vector3[] newPath, bool pathSuccessful)
     {
@@ -42,5 +42,9 @@ public class Unit : MonoBehaviour
             transform.position = Vector3.MoveTowards(transform.position,currentWaypoint,speed * Time.deltaTime);
             yield return null;
         }
+    }
+    public virtual List<ButtonConstructor> GetButtonInfo()
+    {
+        return null;
     }
 }
