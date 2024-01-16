@@ -80,7 +80,7 @@ public class Miner : Unit
             isRequest = true;
         }
         if (!isRequest) return;
-        var scanRange = curRequest.build.BuildScale.x/5;
+        var scanRange = curRequest.build.BuildScale.x/2;
         if (Vector3.Distance(curRequest.pos, transform.position) <= scanRange)
         {
             var b = BuildManager.instance;
