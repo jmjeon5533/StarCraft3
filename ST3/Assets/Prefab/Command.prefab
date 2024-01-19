@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5445747587093686306}
   - component: {fileID: 5445747587093686305}
   - component: {fileID: 8379879508295881081}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Command
   m_TagString: Unit
   m_Icon: {fileID: 0}
@@ -111,4 +111,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BuildScale: {x: 7, y: 7}
-  buildTime: 0
+  buildTime: 20
+  curBuildTime: 0
+  cGridPos: {x: 0, y: 0}
+  scv: {fileID: 719302184189471882, guid: d985efe5db8a20040b39e07ed9d225ad, type: 3}
+  summonPoint: {x: 0, y: 0, z: 0}
+  rallyPoint: {x: 0, y: 0, z: 0}

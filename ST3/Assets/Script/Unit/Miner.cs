@@ -10,7 +10,7 @@ public class BuildRequest
     public Vector3 pos;
     public Vector2Int cGridPos;
     public Build build;
-    public BuildRequest(Build build,Vector3 pos, Vector2Int cGridPos)
+    public BuildRequest(Build build, Vector3 pos, Vector2Int cGridPos)
     {
         this.build = build;
         this.pos = pos;
@@ -25,7 +25,9 @@ public class Miner : Unit
 
     public Queue<BuildRequest> buildRequest = new Queue<BuildRequest>();
     public bool isRequest;
+    public bool isBuilding;
     BuildRequest curRequest;
+    Build curBuildObj;
 
     // List<ButtonUIInfo> mainBuilds = new List<ButtonUIInfo>();
     private void Awake()
@@ -34,6 +36,7 @@ public class Miner : Unit
     }
     public override void Move(Vector3 pos, RaycastHit hit = default)
     {
+        if (isRequest) return;
         targetMineral = null;
         if (hit.collider == null)
         {
@@ -80,22 +83,37 @@ public class Miner : Unit
             isRequest = true;
         }
         if (!isRequest) return;
-        var scanRange = curRequest.build.BuildScale.x/2;
+
+        var b = BuildManager.instance;
+        var scanRange = curRequest.build.BuildScale.x / 2;
         if (Vector3.Distance(curRequest.pos, transform.position) <= scanRange)
         {
-            var b = BuildManager.instance;
-            var obj = Instantiate(curRequest.build, curRequest.pos, Quaternion.identity);
-
-            for (int i = 0; i < obj.BuildScale.x; i++)
+            if (!isBuilding)
             {
-                for (int j = 0; j < obj.BuildScale.y; j++)
+                isBuilding = true;
+                curBuildObj = Instantiate(curRequest.build, curRequest.pos, Quaternion.identity);
+
+                for (int i = 0; i < curBuildObj.BuildScale.x; i++)
                 {
-                    var g = b.grid.grid[curRequest.cGridPos.x + i, curRequest.cGridPos.y + j];
-                    g.isWalkAble = false;
+                    for (int j = 0; j < curBuildObj.BuildScale.y; j++)
+                    {
+                        var g = b.grid.grid[curRequest.cGridPos.x + i, curRequest.cGridPos.y + j];
+                        g.isWalkAble = false;
+                        g.isBuildAble = false;
+                    }
+                }
+                curBuildObj.cGridPos = curRequest.cGridPos;
+            }
+            else
+            {
+                curBuildObj.curBuildTime += Time.deltaTime;
+                if (curBuildObj.curBuildTime >= curBuildObj.buildTime)
+                {
+                    b.curBuilding.Add(curBuildObj);
+                    isBuilding = false;
+                    isRequest = false;
                 }
             }
-            b.curBuilding.Add(obj);
-            isRequest = false;
         }
     }
     public override List<ButtonConstructor> GetButtonInfo()
@@ -124,6 +142,7 @@ public class NormalBuild : ButtonConstructor
         btnXY = new Vector2Int(0, 3);
         iconKey = "Miner/NormalBuild";
         list.Add(new Build_Command());
+        list.Add(new Build_Supply());
     }
 }
 
@@ -140,10 +159,24 @@ public class Build_Command : ButtonConstructor
         iconKey = "Miner/Command";
     }
 }
+public class Build_Supply : ButtonConstructor
+{
+    public override void Action()
+    {
+        BuildManager.instance.SetBuildObj("Supply_Depot");
+    }
+    public Build_Supply()
+    {
+        keyCode = KeyCode.S;
+        btnXY = new Vector2Int(1, 3);
+        iconKey = "Miner/Supply";
+    }
+}
 #endregion
+
+#region AdvanceBuild
 public class AdvanceBuild : ButtonConstructor
 {
-
     public override void Action()
     {
         Debug.Log("Advance");
@@ -151,7 +184,8 @@ public class AdvanceBuild : ButtonConstructor
     public AdvanceBuild()
     {
         keyCode = KeyCode.V;
-        btnXY = new Vector2Int(0, 4);
+        btnXY = new Vector2Int(0, 3);
         iconKey = "Miner/AdvanceBuild";
     }
 }
+#endregion

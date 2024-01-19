@@ -10,4 +10,8 @@ public class Terran : Build
         get { return isground; }
         set { isground = value; }
     }
+    protected virtual void Start()
+    {
+        IsGround = true;
+    }
 }

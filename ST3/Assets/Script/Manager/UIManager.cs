@@ -16,7 +16,7 @@ public class UIManager : MonoBehaviour, ISubscriber
     // [SerializeField] Button advancebuildBtn;
     [HideInInspector] public Image[,] UIgrids;
     public Image baseNodeImg;
-    public Transform gridCanvas;
+    public Transform gridCanvas; 
     private void Awake()
     {
         instance = this;
@@ -53,7 +53,7 @@ public class UIManager : MonoBehaviour, ISubscriber
             for (int y = 0; y < UIgrids.GetLength(1); y++)
             {
                 UIgrids[x, y].enabled = i.keyInfo.curState != i.keyInfo.MoveMode;
-                bool isWalk = b.grid.grid[x, y].isWalkAble;
+                bool isWalk = b.grid.grid[x, y].isBuildAble;
                 UIgrids[x, y].color = isWalk ? new Color(0.7f, 0.7f, 0.7f, 0.5f) : new Color(1, 0, 0, 0.5f);
             }
         }

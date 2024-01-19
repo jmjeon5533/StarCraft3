@@ -18,8 +18,11 @@ public class MoveMode : IClick
     }
     public void LeftClick()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (EventSystem.current.IsPointerOverGameObject() == false)
+        {
+
+            if (!Input.GetKey(KeyCode.LeftShift)) IngameManager.instance.curUnit.Clear();
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out var hit, Mathf.Infinity))
             {
                 switch (hit.collider.gameObject.tag)
@@ -40,11 +43,12 @@ public class MoveMode : IClick
                         }
                 }
             }
+        }
     }
     public void RightClick()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (IngameManager.instance.curUnit == null) return;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (EventSystem.current.IsPointerOverGameObject() == false)
             if (Physics.Raycast(ray, out var hit, Mathf.Infinity))
             {
@@ -52,7 +56,7 @@ public class MoveMode : IClick
                 {
                     foreach (var unit in IngameManager.instance.curUnit)
                     {
-                        unit.Move(hit.point,hit);
+                        unit.Move(hit.point, hit);
                     }
                     // switch (hit.collider.tag)
                     // {
@@ -77,7 +81,7 @@ public class BuildMode : IClick
 {
     public void Init()
     {
-        
+
     }
     public void LeftClick()
     {

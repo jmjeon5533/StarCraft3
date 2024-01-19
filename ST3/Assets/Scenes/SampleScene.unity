@@ -562,6 +562,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   gridWorldSize: {x: 20, y: 20}
+  BuildGridSize: {x: 0, y: 0}
+  BuildNodeDiameter: 0
 --- !u!4 &134903038
 Transform:
   m_ObjectHideFlags: 0
@@ -2434,7 +2436,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitInfo: {fileID: 1538026215}
   selectBtnParent: {fileID: 1659255098}
-  defaltSprite: {fileID: 21300000, guid: 67881098e973aac479b4f0ebd819f409, type: 3}
+  defaultSprite: {fileID: 0}
   baseNodeImg: {fileID: 4705785031825511002, guid: acc69d80c9b67e04fb3f05567c3f51ff, type: 3}
   gridCanvas: {fileID: 1669216959}
 --- !u!4 &1179359701
@@ -2522,9 +2524,12 @@ MonoBehaviour:
   buildList:
   - key: Command
     value: {fileID: 8379879508295881081, guid: f579b4cd5e730a84b9ede0ed16434951, type: 3}
+  - key: Supply_Depot
+    value: {fileID: 1486481796623808005, guid: 22f019081890cf744baf7bee064a3180, type: 3}
   selectGhost: {fileID: 2144546769}
   ghostMaterial: {fileID: 2100000, guid: 65bf335e6d87457408f9ae7358de3227, type: 2}
   grid: {fileID: 134903037}
+  curBuilding: []
 --- !u!114 &1197134546
 MonoBehaviour:
   m_ObjectHideFlags: 0

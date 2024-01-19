@@ -28,19 +28,41 @@ public class BuildManager : MonoBehaviour
         Vector2Int cGridPos = new Vector2Int(UseGrid.gridX - Mathf.RoundToInt(BuildScale.x / 2)
         , UseGrid.gridY - Mathf.RoundToInt(BuildScale.y / 2));
 
-        if (!CheckWalkable(cGridPos, BuildScale))
+        if (!CheckBuildable(cGridPos, BuildScale))
         {
             print("Don't Build");
             return;
         }
-        var miner = g.curUnit[g.curUnitIndex].GetComponent<Miner>();
-        miner.buildRequest.Enqueue(new BuildRequest(selectBuildInfo,UseGrid.worldPos, cGridPos));
-        miner.Move(grid.grid[cGridPos.x - 1,cGridPos.y - 1].worldPos);
+        var miner = g.curUnit[0].GetComponent<Miner>();
+        miner.buildRequest.Enqueue(new BuildRequest(selectBuildInfo, UseGrid.worldPos, cGridPos));
+        miner.Move(grid.grid[cGridPos.x - 1, cGridPos.y - 1].worldPos);
 
         g.InitMode(g.keyInfo.MoveMode);
         UIManager.instance.ResetUI();
         g.curUnit.Clear();
-        
+
+    }
+    public void WalkAbleOnOff(Build obj, bool isActive)
+    {
+        for (int i = 0; i < obj.BuildScale.x; i++)
+        {
+            for (int j = 0; j < obj.BuildScale.y; j++)
+            {
+                var g = grid.grid[obj.cGridPos.x + i, obj.cGridPos.y + j];
+                g.isWalkAble = isActive;
+            }
+        }
+    }
+    public void BuildAbleOnOff(Build obj, bool isActive)
+    {
+        for (int i = 0; i < obj.BuildScale.x; i++)
+        {
+            for (int j = 0; j < obj.BuildScale.y; j++)
+            {
+                var g = grid.grid[obj.cGridPos.x + i, obj.cGridPos.y + j];
+                g.isBuildAble = isActive;
+            }
+        }
     }
     public Build GetBuildDic(string key)
     {
@@ -54,6 +76,18 @@ public class BuildManager : MonoBehaviour
             {
                 var g = grid.grid[leftDownPos.x + i, leftDownPos.y + j];
                 if (!g.isWalkAble) return false;
+            }
+        }
+        return true;
+    }
+    public bool CheckBuildable(Vector2Int leftDownPos, Vector2Int scale)
+    {
+        for (int i = 0; i < scale.x; i++)
+        {
+            for (int j = 0; j < scale.y; j++)
+            {
+                var g = grid.grid[leftDownPos.x + i, leftDownPos.y + j];
+                if (!g.isBuildAble) return false;
             }
         }
         return true;
@@ -76,7 +110,7 @@ public class BuildManager : MonoBehaviour
         Color WalkableColor = new Color(0.25f, 1, 1, 0.5f);
         Color WalkUnableColor = new Color(1, 0, 0, 0.5f);
 
-        ghostMaterial.color = CheckWalkable(cGridPos, selectBuildInfo.BuildScale)
+        ghostMaterial.color = CheckBuildable(cGridPos, selectBuildInfo.BuildScale)
         ? WalkableColor : WalkUnableColor;
     }
     public void GhostWorldMove(Vector3 pos)
