@@ -16,7 +16,9 @@ public class UIManager : MonoBehaviour, ISubscriber
     // [SerializeField] Button advancebuildBtn;
     [HideInInspector] public Image[,] UIgrids;
     public Image baseNodeImg;
-    public Transform gridCanvas; 
+    public InfoUI baseUnitInfo;
+    public Transform gridCanvas;
+    public Transform infoCanvas;
     private void Awake()
     {
         instance = this;
@@ -57,6 +59,11 @@ public class UIManager : MonoBehaviour, ISubscriber
                 UIgrids[x, y].color = isWalk ? new Color(0.7f, 0.7f, 0.7f, 0.5f) : new Color(1, 0, 0, 0.5f);
             }
         }
+    }
+    public void CreateUnitInfo(Unit unit)
+    {
+        var infoUI = Instantiate(baseUnitInfo,infoCanvas);
+        infoUI.target = unit;
     }
     public void ResetUI()
     {

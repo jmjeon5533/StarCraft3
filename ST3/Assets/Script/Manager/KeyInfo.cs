@@ -22,7 +22,7 @@ public class MoveMode : IClick
         {
 
             if (!Input.GetKey(KeyCode.LeftShift)) IngameManager.instance.curUnit.Clear();
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = IngameManager.instance.cam.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out var hit, Mathf.Infinity))
             {
                 switch (hit.collider.gameObject.tag)
@@ -48,7 +48,7 @@ public class MoveMode : IClick
     public void RightClick()
     {
         if (IngameManager.instance.curUnit == null) return;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = IngameManager.instance.cam.ScreenPointToRay(Input.mousePosition);
         if (EventSystem.current.IsPointerOverGameObject() == false)
             if (Physics.Raycast(ray, out var hit, Mathf.Infinity))
             {
@@ -86,7 +86,7 @@ public class BuildMode : IClick
     public void LeftClick()
     {
         var b = BuildManager.instance;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = IngameManager.instance.cam.ScreenPointToRay(Input.mousePosition);
         if (EventSystem.current.IsPointerOverGameObject() == false)
             if (Physics.Raycast(ray, out var hit, Mathf.Infinity))
             {
@@ -109,7 +109,7 @@ public class BuildMode : IClick
     public void Loop()
     {
         var b = BuildManager.instance;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = IngameManager.instance.cam.ScreenPointToRay(Input.mousePosition);
         if (EventSystem.current.IsPointerOverGameObject() == false)
             if (Physics.Raycast(ray, out var hit, Mathf.Infinity))
             {

@@ -8,7 +8,7 @@ public class IngameManager : MonoBehaviour
     public KeyInfo keyInfo;
     [Header("카메라")]
     [SerializeField] Transform camPivot;
-    [SerializeField] Camera cam;
+    public Camera cam;
     public float mouseTriggerRange;
     public float camSpeed;
     [Range(0, 1)]
@@ -79,6 +79,8 @@ public class IngameManager : MonoBehaviour
         var m = Input.mousePosition;
 
         Vector3 returnPos = Vector3.zero;
+        if(m.x > Screen.width * 1.5f || m.x < -Screen.width * 0.5f
+        ||m.y > Screen.height * 1.5f || m.y < -Screen.height * 0.5f) return returnPos;
 
         if (m.x <= triggerLeft) returnPos += Vector3.left;
         else if (m.x >= triggerRight) returnPos += Vector3.right;

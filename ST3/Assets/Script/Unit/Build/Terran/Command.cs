@@ -8,7 +8,6 @@ public class Command : Terran
     public Vector3 summonPoint;
     public Vector3 rallyPoint;
     public Queue<SummonRequest> requests = new Queue<SummonRequest>();
-    float curtime;
     bool isRequest = false;
     SummonRequest curRequest;
     public override void Move(Vector3 pos, RaycastHit hit = default)
@@ -42,14 +41,16 @@ public class Command : Terran
             curRequest = requests.Dequeue();
             isRequest = true;
             curtime = 0;
+            doingTime = curRequest.unit.summonTime;
         }
         if (isRequest)
         {
             curtime += Time.deltaTime;
-            if (curtime > curRequest.summonTime)
+            if (curtime > doingTime)
             {
                 var miner = Instantiate(scv, summonPoint, Quaternion.identity);
                 miner.Move(rallyPoint);
+                curtime = 0;
                 isRequest = false;
             }
         }
@@ -61,7 +62,7 @@ public class Command_Build_SCV : ButtonConstructor
     public override void Action()
     {
         if (command.requests.Count < 5)
-            command.requests.Enqueue(new SummonRequest(command.scv, command.rallyPoint, 5));
+            command.requests.Enqueue(new SummonRequest(command.scv, command.rallyPoint));
     }
     public Command_Build_SCV(Command command)
     {

@@ -110,6 +110,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c339550eeb7a8d34fa1da93a56e65cf4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hp: 500
+  maxHP: 500
+  curtime: 0
+  doingTime: 0
   BuildScale: {x: 7, y: 7}
   buildTime: 20
   curBuildTime: 0

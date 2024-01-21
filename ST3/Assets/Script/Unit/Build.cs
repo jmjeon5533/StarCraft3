@@ -7,12 +7,10 @@ public class SummonRequest
 {
     public Vector3 rallyPoint;
     public Unit unit;
-    public float summonTime;
-    public SummonRequest(Unit unit, Vector3 rallyPoint,float summonTime)
+    public SummonRequest(Unit unit, Vector3 rallyPoint)
     {
         this.unit = unit;
         this.rallyPoint = rallyPoint;
-        this.summonTime = summonTime;
     }
 }
 public class Build : Unit
@@ -25,10 +23,10 @@ public class Build : Unit
     {
         
     }
-    public bool Building()
-    {
-        if(curBuildTime >= buildTime) return true;
-        curBuildTime += Time.deltaTime;
-        return false;   
-    }
+    // public bool Building()
+    // {
+    //     if(curBuildTime >= buildTime) return true;
+    //     curBuildTime += Time.deltaTime;
+    //     return false;   
+    // }
 }

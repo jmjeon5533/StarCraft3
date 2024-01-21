@@ -107,6 +107,8 @@ public class Miner : Unit
             else
             {
                 curBuildObj.curBuildTime += Time.deltaTime;
+                var i = Mathf.Lerp(0, curBuildObj.maxHP, Mathf.InverseLerp(0, curBuildObj.buildTime, curBuildObj.curBuildTime));
+                curBuildObj.hp = i;
                 if (curBuildObj.curBuildTime >= curBuildObj.buildTime)
                 {
                     b.curBuilding.Add(curBuildObj);

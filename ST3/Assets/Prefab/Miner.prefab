@@ -60,7 +60,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48049a088668bd74398e47df8de035c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hp: 12
+  maxHP: 12
+  curtime: 0
+  doingTime: 0
+  summonTime: 12
+  targetMineral: {fileID: 0}
   isRequest: 0
+  isBuilding: 0
 --- !u!1 &719302184195087995
 GameObject:
   m_ObjectHideFlags: 0

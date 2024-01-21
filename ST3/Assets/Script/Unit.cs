@@ -4,10 +4,19 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
+    public float hp,maxHP;
+    public float curtime;
+    public float doingTime;
+    public float summonTime;
     float speed = 10;
     Vector3[] path;
     protected int targetIndex;
     Coroutine curPath;
+
+    protected virtual void Start()
+    {
+        UIManager.instance.CreateUnitInfo(this);
+    }
 
     public virtual void Move(Vector3 pos, RaycastHit hit = default)
     {
