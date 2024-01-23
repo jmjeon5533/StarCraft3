@@ -77,14 +77,15 @@ public class Miner : Unit
     }
     public void Building()
     {
-        if (buildRequest.Count > 0)
+        var b = BuildManager.instance;
+        if (buildRequest.Count > 0 && !isBuilding)
         {
             curRequest = buildRequest.Dequeue();
+            Move(b.grid.grid[curRequest.cGridPos.x - 1, curRequest.cGridPos.y - 1].worldPos);
             isRequest = true;
         }
         if (!isRequest) return;
 
-        var b = BuildManager.instance;
         var scanRange = curRequest.build.BuildScale.x / 2;
         if (Vector3.Distance(curRequest.pos, transform.position) <= scanRange)
         {
